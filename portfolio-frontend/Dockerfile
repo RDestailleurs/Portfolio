@@ -1,11 +1,12 @@
-FROM node:lts-alpine
+FROM node:lts-slim
 
 WORKDIR /app
 
-COPY package*.json ./
-
-RUN yarn install
-
 COPY . .
+#COPY package*.json ./
 
-CMD ["yarn", "dev"]
+RUN rm -rf node_modules && yarn install
+
+#COPY . .
+
+ENTRYPOINT ["yarn", "dev"]

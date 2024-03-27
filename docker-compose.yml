@@ -1,0 +1,58 @@
+version: "3.4"
+services:
+  frontend:
+#   image: front
+    build: ./portfolio-frontend
+    container_name: frontend
+    ports:
+      - 8000:8000
+    volumes:
+      - /c/Users/Romain/Desktop/codeGit/Portfolio/portfolio-frontend:/srv/app
+    networks:
+      - dev
+  backend:
+#   image: back
+    build: ./portfolio-backend
+    container_name: backend
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html/public
+    ports:
+      - 80:80
+    volumes:
+      - /c/Users/Romain/Desktop/codeGit/Portfolio/portfolio-backend:/var/www/html
+    networks:
+      - dev
+#   image : db
+  db:
+    container_name: db
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: portfolio
+      MYSQL_ROOT_PASSWORD: 123
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - dev
+#   Service adminer pour voir les données dans le navigateur
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+      ADMINER_DESIGN: pepa-linha
+    depends_on:
+      - db
+    networks:
+      - dev
+networks:
+  dev:
+
+volumes:
+  db_data:
+  node_modules_volume:
+  vendor_volume:
